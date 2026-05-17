@@ -3,16 +3,46 @@ import { BookOpen, Briefcase, GraduationCap, Code2 } from 'lucide-react';
 
 export default function About() {
   const experiences = [
-    { year: '2025', role: 'Trust & Safety, Content Moderation', company: 'Accenture (Meta)' },
-    { year: '2023–2024', role: 'Retirement & Compliance', company: 'Open Access BPO (Guideline 401k)' },
-    { year: '2019–2022', role: 'E-commerce Email Support', company: 'Sykes (OfferUp)' },
-    { year: '2018–2019', role: 'Tier 3 Support, Voice/Chat/Email', company: 'TTEC (DoorDash)' },
-    { year: '2017', role: 'Voice Support', company: 'ePerformax (PayPal)' },
-    { year: '2016', role: 'Voice Support', company: 'Sitel (Capital One)' },
+    { 
+      year: '2025', 
+      role: 'Trust & Safety New Associate', 
+      company: 'Accenture, Inc. (META)',
+      description: 'Enforced content moderation policies and verified 500+ accounts weekly with 100% accuracy to enhance platform safety and data integrity.'
+    },
+    { 
+      year: '2023 – 2024', 
+      role: 'Call Center Associate', 
+      company: 'Open Access BPO (Guideline 401k, USA)',
+      description: 'Guided 30+ daily participants through financial options and resolved complex cases 20% faster than average while maintaining full regulatory compliance.'
+    },
+    { 
+      year: '2019 – 2022', 
+      role: 'Customer Service Agent', 
+      company: 'Sykes Enterprises (OfferUp, USA)',
+      description: 'Resolved 150+ daily inquiries and reduced escalations by 20–30% through technical issue analysis and investigative problem-solving.'
+    },
+    { 
+      year: '2018 – 2019', 
+      role: 'Customer Service Representative III', 
+      company: 'TTEC (DoorDash – Blended Support)',
+      description: 'Handled multi-channel support for orders, app navigation, and technical issues for customers, dashers, and merchants.'
+    },
+    { 
+      year: '2017 – 2018', 
+      role: 'Customer Service Representative', 
+      company: 'ePerformax (PayPal – Voice Support)',
+      description: 'Managed inbound security calls, password recovery, and bank linking while monitoring accounts for suspicious activity and potential fraud.'
+    },
+    { 
+      year: '2016 – 2017', 
+      role: 'Customer Service Representative', 
+      company: 'Sitel (Capital One – Voice Support)',
+      description: 'Resolved complex credit card concerns, identified fraudulent transactions, and managed sensitive billing and statement inquiries.'
+    },
   ];
 
   const education = [
-    { year: '2025–Now', degree: 'Java Back-end Development Student', school: 'Uplift Coding Bootcamp', link: 'https://www.upliftcodecamp.com/' },
+    { year: 'Nov 2025 – May 2026', degree: 'Java Back-end Development Graduate', school: 'Uplift Coding Bootcamp', link: 'https://www.upliftcodecamp.com/' },
     { year: '2016', degree: "ICT Associate's Degree + 600 hr Tech Support OJT", school: 'Rizal Technological University', link: 'https://www.rtu.edu.ph/' },
   ];
 
@@ -83,13 +113,13 @@ export default function About() {
               {education.map((edu, i) => (
                 <div key={i} className="relative pl-8">
                   <div className="absolute left-0 top-1.5 w-4 h-4 rounded-full bg-brand-light border-4 border-white shadow-sm"></div>
-                  <div className="text-[10px] sm:text-sm font-mono text-brand-dark mb-1 bg-white inline-block px-2 sm:px-3 py-0.5 sm:py-1 rounded-lg border border-slate-100 shadow-sm">{edu.year}</div>
-                  <h4 className="text-base sm:text-lg font-bold text-slate-800 mt-1">{edu.degree}</h4>
+                  <div className="text-xs sm:text-sm font-mono text-brand-dark mb-1 bg-white inline-block px-2 sm:px-3 py-0.5 sm:py-1 rounded-lg border border-slate-100 shadow-sm">{edu.year}</div>
+                  <h4 className="text-lg sm:text-xl font-bold text-slate-800 mt-1">{edu.degree}</h4>
                   <a 
                     href={edu.link} 
                     target="_blank" 
                     rel="noreferrer"
-                    className="text-slate-500 text-xs sm:text-sm mt-0.5 font-medium hover:text-brand-dark transition-colors inline-block"
+                    className="text-slate-500 text-sm mt-0.5 font-medium hover:text-brand-dark transition-colors inline-block"
                   >
                     {edu.school}
                   </a>
@@ -117,13 +147,14 @@ export default function About() {
               <div className="absolute left-[7px] top-2 bottom-2 w-0.5 bg-brand-dark/20"></div>
               
               {experiences.map((exp, i) => (
-                <div key={i} className="relative pl-8">
+                <div key={i} className="relative pl-8 mb-4 last:mb-0">
                   <div className="absolute left-0 top-1.5 w-4 h-4 rounded-full bg-slate-400 border-4 border-white shadow-sm"></div>
-                  <div className="flex flex-col md:flex-row md:items-center gap-0.5 md:gap-3 mb-0.5">
-                    <span className="text-[10px] font-mono text-slate-600 bg-white inline-block px-1.5 py-0.5 rounded border border-slate-100 shadow-sm w-fit">{exp.year}</span>
-                    <h4 className="text-sm sm:text-base font-bold text-slate-800 tracking-tight">{exp.company}</h4>
+                  <div className="flex flex-col md:flex-row md:items-center gap-0.5 md:gap-3 mb-1">
+                    <span className="text-xs font-mono text-slate-600 bg-white inline-block px-1.5 py-0.5 rounded border border-slate-100 shadow-sm w-fit shrink-0 text-center">{exp.year}</span>
+                    <h4 className="text-base sm:text-lg font-bold text-slate-800 tracking-tight">{exp.company}</h4>
                   </div>
-                  <p className="text-slate-500 text-[11px] sm:text-sm">{exp.role}</p>
+                  <p className="text-slate-950 font-bold text-xs sm:text-sm italic mb-1.5">{exp.role}</p>
+                  <p className="text-slate-500 text-xs sm:text-sm leading-relaxed max-w-lg">{exp.description}</p>
                 </div>
               ))}
             </div>

@@ -61,10 +61,10 @@ export default function Hero() {
               <span className="font-bold text-brand-dark">Former:</span> Customer Support @ Meta, DoorDash, OfferUp, Guideline
             </p>
             <p>
-              <span className="font-bold text-brand-dark">Current:</span> Back-end Development Student
+              <span className="font-bold text-brand-dark">Current:</span> Aspiring Java Developer
             </p>
             <div className="inline-block mt-2 px-4 py-2 bg-slate-900 text-white rounded-xl font-medium text-sm w-fit border border-slate-700/50 shadow-sm text-left">
-              <span className="text-brand-light mr-2">Mission:</span> Building the tools I once relied on.
+              <span className="text-brand-light mr-2">Mission:</span>Building the tools I once relied on.
             </div>
           </motion.div>
 
