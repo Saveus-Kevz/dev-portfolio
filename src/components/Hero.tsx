@@ -1,7 +1,10 @@
-import { motion } from 'motion/react';
-import { Linkedin, Mail, Github, Gitlab } from 'lucide-react';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { Linkedin, Mail, Github, Gitlab, X } from 'lucide-react';
 
 export default function Hero() {
+  const [isPhotoOpen, setIsPhotoOpen] = useState(false);
+  const profilePhoto = "https://i.imgur.com/R9jf7qV.jpeg";
   return (
     <section id="home" className="w-full max-w-6xl mx-auto min-h-[90vh] flex flex-col justify-center px-6 pt-24 md:pt-32 pb-12">
       <div className="bg-brand-bg/40 border border-brand-light/30 rounded-[3rem] md:rounded-[4.5rem] flex flex-col md:flex-row items-center justify-between p-8 md:p-16 lg:p-24 relative overflow-hidden">
@@ -32,17 +35,20 @@ export default function Hero() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="flex md:hidden justify-center z-10"
           >
-            <div className="relative">
-              <div className="absolute inset-0 bg-brand-light rounded-[2.5rem] transform rotate-3 scale-105 opacity-60 pointer-events-none"></div>
+            <button 
+              onClick={() => setIsPhotoOpen(true)}
+              className="relative group cursor-zoom-in"
+            >
+              <div className="absolute inset-0 bg-brand-light rounded-[2.5rem] transform rotate-3 scale-105 opacity-60 pointer-events-none group-hover:rotate-0 transition-transform duration-300"></div>
               <div className="relative w-36 h-36 bg-slate-200 rounded-[2rem] border-4 border-white overflow-hidden shadow-lg flex items-center justify-center">
                 <div className="absolute inset-0 bg-gradient-to-br from-brand-dark/10 to-slate-900/10 z-10 mix-blend-overlay"></div>
                 <img 
-                  src="https://i.imgur.com/R9jf7qV.jpeg" 
+                  src={profilePhoto} 
                   alt="Kevin Flores" 
                   className="w-full h-full object-cover"
                 />
               </div>
-            </div>
+            </button>
           </motion.div>
 
           <motion.div 
@@ -96,15 +102,18 @@ export default function Hero() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="hidden md:flex w-full md:w-2/5 mt-12 md:mt-0 justify-center md:justify-end z-10"
         >
-          <div className="relative">
+          <button 
+            onClick={() => setIsPhotoOpen(true)}
+            className="relative group cursor-zoom-in"
+          >
             {/* Soft background shape */}
-            <div className="absolute inset-0 bg-brand-light rounded-[3rem] transform rotate-3 scale-105 opacity-60 pointer-events-none"></div>
+            <div className="absolute inset-0 bg-brand-light rounded-[3rem] transform rotate-3 scale-105 opacity-60 pointer-events-none group-hover:rotate-0 transition-transform duration-500"></div>
             
             {/* The photo container */}
             <div className="relative w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-64 lg:w-72 lg:h-80 bg-slate-200 rounded-[2.5rem] border-8 border-white overflow-hidden shadow-xl flex items-center justify-center">
               <div className="absolute inset-0 bg-gradient-to-br from-brand-dark/10 to-slate-900/10 z-10 mix-blend-overlay"></div>
               <img 
-                src="https://i.imgur.com/R9jf7qV.jpeg" 
+                src={profilePhoto} 
                 alt="Kevin Flores" 
                 className="w-full h-full object-cover"
                 onError={(e) => {
@@ -115,10 +124,51 @@ export default function Hero() {
                 }}
               />
             </div>
-          </div>
+          </button>
         </motion.div>
 
       </div>
+
+      {/* Photo Modal */}
+      <AnimatePresence>
+        {isPhotoOpen && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setIsPhotoOpen(false)}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-10 bg-slate-950/90 backdrop-blur-sm cursor-zoom-out"
+          >
+            <motion.button
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="absolute top-6 right-6 p-3 bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsPhotoOpen(false);
+              }}
+            >
+              <X className="w-6 h-6" />
+            </motion.button>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative max-w-full max-h-full rounded-[2rem] md:rounded-[3rem] overflow-hidden border-4 border-white/20 shadow-2xl"
+            >
+              <img 
+                src={profilePhoto} 
+                alt="Kevin Flores Full" 
+                className="max-w-full max-h-[85vh] object-contain"
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
