@@ -4,6 +4,7 @@ import { ExternalLink, Terminal, Globe, LayoutTemplate, PlayCircle, Calendar, Ch
 
 export default function Works() {
   const [selectedProject, setSelectedProject] = useState<number | null>(null);
+  const [showWalkthrough, setShowWalkthrough] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -17,7 +18,8 @@ export default function Works() {
       icon: Terminal,
       color: 'bg-emerald-100/50 text-emerald-700',
       tags: ['Spring Boot', 'ReactJS', 'JWT', 'MariaDB', 'Render'],
-      isLive: true
+      isLive: true,
+      iframeUrl: 'https://minit-xdjw.onrender.com/'
     },
     {
       title: 'IronBeast',
@@ -115,7 +117,7 @@ export default function Works() {
             
             <div className="flex flex-col lg:flex-row gap-6 md:gap-8 items-center text-left relative z-10">
               <div 
-                onClick={() => setSelectedProject(0)}
+                onClick={() => setShowWalkthrough(true)}
                 className="w-full lg:w-3/5 aspect-video shrink-0 bg-black rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl ring-1 ring-white/10 group cursor-pointer relative"
               >
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors z-10 flex items-center justify-center">
@@ -281,13 +283,16 @@ export default function Works() {
 
       {/* Project Modal */}
       <AnimatePresence>
-        {selectedProject !== null && (
+        {(selectedProject !== null || showWalkthrough) && (
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8 lg:p-12 bg-slate-950/90 backdrop-blur-md"
-            onClick={() => setSelectedProject(null)}
+            onClick={() => {
+              setSelectedProject(null);
+              setShowWalkthrough(false);
+            }}
           >
             <motion.div 
               initial={{ scale: 0.9, opacity: 0, y: 20 }}
@@ -297,21 +302,18 @@ export default function Works() {
               onClick={(e) => e.stopPropagation()}
             >
               <button 
-                onClick={() => setSelectedProject(null)}
-                className="absolute top-4 right-4 md:top-6 md:right-6 z-50 p-2 bg-black/10 hover:bg-black/20 rounded-full transition-colors"
+                onClick={() => {
+                  setSelectedProject(null);
+                  setShowWalkthrough(false);
+                }}
+                className="absolute top-4 right-4 md:top-6 md:right-6 z-50 p-2 bg-black/10 hover:bg-black/20 rounded-full transition-colors font-bold text-slate-800"
               >
                 <X className="w-6 h-6" />
               </button>
 
               {/* Media Part */}
               <div className="w-full md:w-3/5 bg-slate-100 flex items-center justify-center relative group">
-                {projects[selectedProject].iframeUrl ? (
-                  <iframe 
-                    src={projects[selectedProject].iframeUrl}
-                    className="w-full h-full min-h-[300px] md:min-h-[500px]"
-                    title={projects[selectedProject].title}
-                  />
-                ) : selectedProject === 0 ? (
+                {showWalkthrough ? (
                   <div className="w-full aspect-video">
                     <iframe 
                       className="w-full h-full"
@@ -320,63 +322,79 @@ export default function Works() {
                       allow="autoplay"
                     />
                   </div>
-                ) : (
+                ) : selectedProject !== null && projects[selectedProject].iframeUrl ? (
+                  <iframe 
+                    src={projects[selectedProject].iframeUrl}
+                    className="w-full h-full min-h-[300px] md:min-h-[500px]"
+                    title={projects[selectedProject].title}
+                  />
+                ) : selectedProject !== null ? (
                   <img 
                     src={projects[selectedProject].image} 
                     alt={projects[selectedProject].title}
                     className="w-full h-full object-cover"
                   />
-                )}
+                ) : null}
               </div>
 
               {/* Info Part */}
-              <div className="w-full md:w-2/5 p-8 md:p-12 overflow-y-auto flex flex-col gap-6 md:gap-8 bg-white">
-                <div className="flex flex-col gap-2">
-                  <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${projects[selectedProject].color} mb-3`}>
-                    {(() => {
-                      const Icon = projects[selectedProject].icon;
-                      return <Icon className="w-6 h-6" />;
-                    })()}
+              {(() => {
+                const project = showWalkthrough ? projects[0] : (selectedProject !== null ? projects[selectedProject] : null);
+                if (!project) return null;
+
+                return (
+                  <div className="w-full md:w-2/5 p-8 md:p-12 overflow-y-auto flex flex-col gap-6 md:gap-8 bg-white">
+                    <div className="flex flex-col gap-2">
+                      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${project.color} mb-3`}>
+                        <project.icon className="w-6 h-6" />
+                      </div>
+                      <h2 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight">
+                        {showWalkthrough ? "Project Walkthrough" : project.title}
+                      </h2>
+                      <div className="w-16 h-1.5 bg-brand-light rounded-full"></div>
+                    </div>
+
+                    <div className="space-y-4">
+                      <h4 className="text-xs font-black uppercase text-slate-400 tracking-widest">
+                        {showWalkthrough ? "About the Walkthrough" : "About Project"}
+                      </h4>
+                      <p className="text-slate-600 text-base md:text-lg leading-relaxed">
+                        {showWalkthrough 
+                          ? "Comprehensive demonstration of the retail system architecture and Spring Security integration for the MINIT project."
+                          : project.description}
+                      </p>
+                    </div>
+
+                    {!showWalkthrough && (
+                      <div className="space-y-4">
+                        <h4 className="text-xs font-black uppercase text-slate-400 tracking-widest">Technologies</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {project.tags.map(tag => (
+                            <span key={tag} className="px-3 py-1 bg-slate-100 text-slate-700 text-xs font-bold rounded-lg border border-slate-200">
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="mt-auto pt-6 flex flex-col gap-3">
+                      <a 
+                        href={showWalkthrough ? "https://www.youtube.com/watch?v=12oEGg8b6qk" : project.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex items-center justify-center gap-3 w-full py-4 bg-brand-dark text-white rounded-2xl font-bold shadow-lg hover:shadow-brand-dark/20 hover:-translate-y-0.5 transition-all"
+                      >
+                        {showWalkthrough ? <PlayCircle className="w-5 h-5" /> : <Globe className="w-5 h-5" />}
+                        {showWalkthrough ? "Open in YouTube" : "Launch Live Project"}
+                      </a>
+                      <p className="text-xs text-slate-400 text-center font-medium">
+                        Opened in a new browser tab for the full experience.
+                      </p>
+                    </div>
                   </div>
-                  <h2 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight">
-                    {projects[selectedProject].title}
-                  </h2>
-                  <div className="w-16 h-1.5 bg-brand-light rounded-full"></div>
-                </div>
-
-                <div className="space-y-4">
-                  <h4 className="text-xs font-black uppercase text-slate-400 tracking-widest">About Project</h4>
-                  <p className="text-slate-600 text-base md:text-lg leading-relaxed">
-                    {projects[selectedProject].description}
-                  </p>
-                </div>
-
-                <div className="space-y-4">
-                  <h4 className="text-xs font-black uppercase text-slate-400 tracking-widest">Technologies</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {projects[selectedProject].tags.map(tag => (
-                      <span key={tag} className="px-3 py-1 bg-slate-100 text-slate-700 text-xs font-bold rounded-lg border border-slate-200">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="mt-auto pt-6 flex flex-col gap-3">
-                  <a 
-                    href={projects[selectedProject].url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-center justify-center gap-3 w-full py-4 bg-brand-dark text-white rounded-2xl font-bold shadow-lg hover:shadow-brand-dark/20 hover:-translate-y-0.5 transition-all"
-                  >
-                    <Globe className="w-5 h-5" />
-                    Launch Live Project
-                  </a>
-                  <p className="text-xs text-slate-400 text-center font-medium">
-                    Opened in a new browser tab for the full experience.
-                  </p>
-                </div>
-              </div>
+                );
+              })()}
             </motion.div>
           </motion.div>
         )}
